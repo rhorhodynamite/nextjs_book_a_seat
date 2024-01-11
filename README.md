@@ -20,6 +20,12 @@ Test DB: http://localhost:3005/api/helloDb
 
 Reservation from seat 1: http://localhost:3005/api/reservations?selSeat=1
 
+## Important
+
+This API is backend of the APP https://github.com/pafavero/book_a_seat. 
+Based on the current setting, the React app is located under the http://localhost:3000 domain and will make requests to the http://localhost:3005 domain.
+
+If you change the domains, to avoid CORS problem, it is necessary to modify the following file: lib/db.js
 
 
 ## Learn More
