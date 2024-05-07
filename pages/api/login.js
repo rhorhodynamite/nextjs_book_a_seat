@@ -1,6 +1,28 @@
 import crypto from 'crypto';
 import {cors, runMiddleware} from '../../lib/db';
 
+
+export default async function handler(req, res) {
+    await Cors(req, res, {
+        methods: ['POST', 'GET'],
+        origin: 'https://book-a-seat-eta.vercel.app',
+        // You can also use a wildcard '*' if you want to allow all domains
+        // However, this is less secure
+        optionsSuccessStatus: 200,
+        credentials: true,
+        allowedHeaders: 'Content-Type, Authorization',
+    });
+
+    // Your existing API logic here, for example:
+    if (req.method === 'POST') {
+        // Handle the login logic here
+        res.status(200).json({ message: 'Login Successful' });
+    } else {
+        // Handle other methods or return an error if they're not allowed
+        res.status(405).json({ error: 'Method Not Allowed' });
+    }
+}
+
 const fakeLogin = [
   {user: "admin0", pwd:"admin0", role:"admin"},
   {user: "user1", pwd:"user1", role:"user"},
