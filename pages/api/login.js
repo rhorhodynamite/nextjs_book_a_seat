@@ -10,13 +10,13 @@ const fakeLogin = [
 
 export default async function handler(req, res) {
   await runMiddleware(req, res, cors);
-  // console.log('login', req.method);
-  // const foundItem = fakeLogin.find(item => {
-  //   if (item.user === req.body.user && item.pwd === req.body.pwd) {
-  //     return item;
-  //   }
-  //   return null;
-  // });
+   console.log('login', req.method);
+   const foundItem = fakeLogin.find(item => {
+     if (item.user === req.body.user && item.pwd === req.body.pwd) {
+       return item;
+     }
+     return null;
+   });
 
   // temporary solution
   const foundItem = {user: req.body.user, pwd:"user1", role:"user"}
