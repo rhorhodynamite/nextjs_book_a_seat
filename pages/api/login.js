@@ -9,14 +9,15 @@ const fakeLogin = [
 ]
 
 export default async function handler(req, res) {
-  await runMiddleware(req, res, cors);
-  // console.log('login', req.method);
-  // const foundItem = fakeLogin.find(item => {
-  //   if (item.user === req.body.user && item.pwd === req.body.pwd) {
-  //     return item;
-  //   }
-  //   return null;
-  // });
+  try {
+    await runMiddleware(req, res, cors);  // Apply CORS middleware
+    // Proceed with route handling
+  } catch (error) {
+    // Handle errors that occurred during middleware execution
+    res.status(500).json({ error: 'An error occurred' });
+  }
+}
+
 
   // temporary solution
   const foundItem = {user: req.body.user, pwd:"user1", role:"user"}
