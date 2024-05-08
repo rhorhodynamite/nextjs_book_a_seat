@@ -1,10 +1,11 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import Cors from 'cors'
 const cors = Cors({
-  methods: ['POST', 'GET', 'HEAD'],
-  origin: '*',
-  credentials: true
-})
+    methods: ['GET', 'POST', 'HEAD', 'OPTIONS'],  // Including OPTIONS is crucial
+    origin: 'https://book-a-seat-eta.vercel.app',  // Specify the exact origin
+    credentials: true,  // Allows cookies and headers to be included in cross-origin requests
+    allowedHeaders: ['Content-Type', 'Authorization'],
+});
 
 // Helper method to wait for a middleware to execute before continuing
 // And to throw an error when an error happens in a middleware
