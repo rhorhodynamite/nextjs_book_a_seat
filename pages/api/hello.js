@@ -2,7 +2,7 @@
 import Cors from 'cors'
 const cors = Cors({
   methods: ['POST', 'GET', 'HEAD'],
-  origin: ['https://book-a-seat-hdkl7ux7m-rhorhodynamites-projects.vercel.app', 'http://localhost:3000'],
+  origin: ['https://book-a-seat-eta.vercel.app/', 'http://localhost:3000'],
   credentials: true
 })
 
