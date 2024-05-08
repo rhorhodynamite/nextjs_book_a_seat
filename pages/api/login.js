@@ -9,30 +9,19 @@ const fakeLogin = [
 ];
 
 export default async function handler(req, res) {
-  try {
-    // Apply CORS middleware
     await runMiddleware(req, res, cors);
 
-    // Temporary login solution
-    const { user, pwd } = req.body;  // Destructure user and pwd from request body
-    const foundItem = fakeLogin.find(item => item.user === user && item.pwd === pwd);
-
-    // Check if user exists and password matches
-    if (foundItem) {
-      const buffer = crypto.randomBytes(48);
-      res.status(200).json({
-        token: buffer.toString('hex'),
-        role: foundItem.role,
-        user: foundItem.user
-      });
-    } else {
-      // If no user is found, or password doesn't match
-      res.status(401).json({ error: 'Unauthorized' });
+    // Explicitly handle OPTIONS method for CORS preflight
+    if (req.method === 'OPTIONS') {
+        return res.status(200).send('OK');  // Ensure this responds properly
     }
-  } catch (error) {
-    // Handle errors that occurred during middleware execution or if any other error occurs
-    console.error('Error in login API:', error);
-    res.status(500).json({ error: 'An error occurred' });
-  }
+
+    // Proceed with other methods
+    if (req.method === 'POST') {
+        // Login logic
+        res.json({ status: 'Success' });
+    } else {
+        res.status(405).end();
+    }
 }
 
