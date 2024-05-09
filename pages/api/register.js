@@ -3,6 +3,22 @@ import { conn } from '../../lib/db';
 import { randomBytes, scryptSync } from 'crypto';
 
 export default async function handler(req, res) {
+    // Handle OPTIONS request for CORS preflight
+    if (req.method === 'OPTIONS') {
+        res.setHeader('Access-Control-Allow-Origin', '*');  // Adjust according to your CORS policy
+        res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+        res.status(204).end();
+        return;
+    }
+
+    // Ensure that this endpoint only processes POST requests
+    if (req.method !== 'POST') {
+        res.setHeader('Allow', ['POST', 'OPTIONS']);
+        res.status(405).end(`Method ${req.method} Not Allowed`);
+        return;
+    }
+
     const { username, password } = req.body;
 
     if (!username || !password) {
@@ -22,7 +38,7 @@ export default async function handler(req, res) {
 
         const newUser = queryResult.rows[0];
         res.status(201).json({ message: 'User created', user: { username: newUser.username } });
-    } catch (error) {
+    } catch ( error ) {
         console.error('Registration error:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
