@@ -23,7 +23,7 @@ export default async function handler(req, res) {
     // Proceed with other methods
     if (req.method === 'POST') {
         // Login logic
-        res.setHeader('Access-Control-Allow-Origin', 'https://book-a-seat-eta.vercel.app');
+    
         res.json({ status: 'Success' });
     } else {
         res.status(405).end();
