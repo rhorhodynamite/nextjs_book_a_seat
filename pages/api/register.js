@@ -1,5 +1,5 @@
 // pages/api/register.js
-import { conn } from '../../lib/db';
+import {conn, cors, runMiddleware } from '../../lib/db';
 import { randomBytes, scryptSync } from 'crypto';
 
 export default async function handler(req, res) {
