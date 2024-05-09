@@ -13,14 +13,14 @@ export default async function handler(req, res) {
 
     // Explicitly handle OPTIONS method for CORS preflight
     if (req.method === 'OPTIONS') {
-        // Handle OPTIONS request for CORS preflight
         res.setHeader('Access-Control-Allow-Origin', 'https://book-a-seat-eta.vercel.app');
         res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
         res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Cache-Control, Expires, Pragma');
         res.status(204).end();
         return;
+    }
 
-        // Proceed with POST method
+    // Proceed with POST method
     if (req.method === 'POST') {
         // Login logic
         res.json({ status: 'Success' });
@@ -30,3 +30,4 @@ export default async function handler(req, res) {
     // Handle any other HTTP methods
     res.status(405).end();
 }
+
