@@ -20,13 +20,13 @@ export default async function handler(req, res) {
         res.status(204).end();
         return;
 
-    // Proceed with other methods
+        // Proceed with POST method
     if (req.method === 'POST') {
         // Login logic
-    
         res.json({ status: 'Success' });
-    } else {
-        res.status(405).end();
+        return;
     }
-}
 
+    // Handle any other HTTP methods
+    res.status(405).end();
+}
