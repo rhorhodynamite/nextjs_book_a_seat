@@ -8,7 +8,8 @@ const saltRounds = 10; // Define the number of salt rounds for bcrypt
 export default async function handler(req, res) {
   await runMiddleware(req, res, cors);
 
-  const { username, password } = req.body;
+  const { user: username, pwd: password } = req.body;
+
 
   try {
     // Query the users table for the provided username
