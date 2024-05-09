@@ -8,26 +8,30 @@ const fakeLogin = [
   { user: "user3", pwd: "user3", role: "user" },
 ];
 
-export default async function handler(req, res) {
-    await runMiddleware(req, res, cors);
+// pages/api/login.js
 
-    // Explicitly handle OPTIONS method for CORS preflight
+export default function handler(req, res) {
+    // Set CORS headers for all responses
+    res.setHeader('Access-Control-Allow-Origin', 'https://book-a-seat-eta.vercel.app');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Cache-Control, Expires, Pragma');
+
+    // Handle OPTIONS method for CORS preflight
     if (req.method === 'OPTIONS') {
-        res.setHeader('Access-Control-Allow-Origin', 'https://book-a-seat-eta.vercel.app');
-        res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-        res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Cache-Control, Expires, Pragma');
+        // Add specific headers for OPTIONS method
         res.status(204).end();
         return;
     }
 
-    // Proceed with POST method
+    // Handle POST method
     if (req.method === 'POST') {
-        // Login logic
-        res.json({ status: 'Success' });
-        return;
+        // Process the POST request
+        // Your login logic here
+        res.status(200).json({ message: 'Login successful' });
+    } else {
+        // Return 405 Method Not Allowed for other methods
+        res.setHeader('Allow', 'POST, OPTIONS');
+        res.status(405).end();
     }
-
-    // Handle any other HTTP methods
-    res.status(405).end();
 }
 
