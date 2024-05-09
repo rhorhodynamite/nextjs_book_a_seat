@@ -2,12 +2,15 @@
 import {conn, cors, runMiddleware } from '../../lib/db';
 import { randomBytes, scryptSync } from 'crypto';
 
+
 export default async function handler(req, res) {
+    // Set CORS headers for all responses
+    res.setHeader('Access-Control-Allow-Origin', 'https://book-a-seat-eta.vercel.app');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
     try {
         if (req.method === 'OPTIONS') {
-            res.setHeader('Access-Control-Allow-Origin', 'https://book-a-seat-eta.vercel.app');
-            res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-            res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
             return res.status(204).end();
         }
 
@@ -35,7 +38,6 @@ export default async function handler(req, res) {
         res.status(201).json({ message: 'User created', user: { username: newUser.username } });
     } catch (error) {
         console.error('Registration error:', error);
-        res.setHeader('Access-Control-Allow-Origin', 'https://book-a-seat-eta.vercel.app');  // Ensure CORS headers are also sent on errors
         res.status(500).json({ error: 'Internal server error' });
     }
 }
