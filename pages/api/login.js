@@ -37,6 +37,6 @@ export default async function handler(req, res) {
 }
 
 // Hash the provided password before storing it in the database
-export async function hashPassword(password) {
-  return bcrypt.hash(password, saltRounds);
+//export async function hashPassword(password) {
+//  return bcrypt.hash(password, saltRounds);
 }
