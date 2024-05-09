@@ -4,8 +4,8 @@ const cors = Cors({
     methods: ['GET', 'POST', 'HEAD', 'OPTIONS'],  // Including OPTIONS is crucial
     origin: 'https://book-a-seat-eta.vercel.app',  // Specify the exact origin
     credentials: true,  // Allows cookies and headers to be included in cross-origin requests
-    allowedHeaders: ['Content-Type', 'Authorization'],
-});
+    
+})
 
 // Helper method to wait for a middleware to execute before continuing
 // And to throw an error when an error happens in a middleware
@@ -21,18 +21,6 @@ function runMiddleware(req,res,fn) {
   })
 }
 export default async function handler(req, res) {
-    await runMiddleware(req, res, cors);
-
-    // Explicitly handle OPTIONS method for CORS preflight
-    if (req.method === 'OPTIONS') {
-        return res.status(200).send('OK');  // Ensure this responds properly
-    }
-
-    // Proceed with other methods
-    if (req.method === 'POST') {
-        // Login logic
-        res.json({ status: 'Success' });
-    } else {
-        res.status(405).end();
-    }
+  await runMiddleware(req, res, cors)
+  res.json({ name: 'John Doe' })
 }
