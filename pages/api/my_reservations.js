@@ -9,6 +9,7 @@ export default async function handler(req, res) {
 
   let query = '';
   const id = req.query.id;
+  let rslt = null;
   console.log('method get', id);
 
   try {
@@ -43,4 +44,3 @@ export default async function handler(req, res) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 }
-
