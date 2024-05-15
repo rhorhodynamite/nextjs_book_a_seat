@@ -7,6 +7,7 @@ export default async function handler(req, res) {
   } else if (req.method === 'GET') {
     const id = req.query.id;
     let rslt = null;
+    console.log('method get', id);
     if (id) {
       // Fetch bookings for a specific user
       rslt = await conn.query(`SELECT r.id, r.seat_id as seatId, r.username, 
@@ -16,12 +17,12 @@ export default async function handler(req, res) {
                                WHERE r.username = $1
                                ORDER BY r.start_date`, [id]);
     } else {
-      // Fetch bookings for all users for today
+      // Fetch bookings for all users overlapping today
       rslt = await conn.query(`SELECT r.id, r.seat_id as seatId, r.username, 
                                       to_char(r.start_date, 'YYYY-MM-DD HH24:MI:SS') as startDate, 
                                       to_char(r.end_date, 'YYYY-MM-DD HH24:MI:SS') as endDate
                                FROM book_a_seat.reservation r
-                               WHERE r.start_date::date = CURRENT_DATE
+                               WHERE r.start_date <= CURRENT_DATE AND r.end_date >= CURRENT_DATE
                                ORDER BY r.start_date`);
     }
     res.status(200).json({
@@ -29,5 +30,4 @@ export default async function handler(req, res) {
     });
   }
 }
-
 
