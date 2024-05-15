@@ -28,6 +28,7 @@ export default async function handler(req, res) {
                                JOIN book_a_seat.seat_objs s ON r.seat_id = s.id
                                ORDER BY r.start_date`);
     }
+    console.log('server result:', rslt.rows);  // Add this line to log server result
     res.status(200).json({
       rslt: rslt?.rows
     });
