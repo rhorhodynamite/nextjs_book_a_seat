@@ -28,7 +28,8 @@ export default async function handler(req, res) {
       // Log the incoming data for debugging
       console.log('Received POST data:', { interval, user, seatId });
 
-      // Check if the user has already booked other seats during the same period, excluding seat_id 16 and 17
+      // Remove or comment out the overlap check logic
+      /*
       const checkOverlapQuery = `
         SELECT DISTINCT(seat_id) 
         FROM book_a_seat.reservation 
@@ -46,30 +47,15 @@ export default async function handler(req, res) {
       const rslt = await conn.query(checkOverlapQuery, [user, start, end]);
       const rows = rslt?.rows;
 
-      // Log the result of the overlap check
       console.log('Overlap Check Result:', rows);
 
       if (rows.length > 0) {
-        // Log the actual overlapping reservations for debugging
-        const overlapReservationsQuery = `
-          SELECT * 
-          FROM book_a_seat.reservation 
-          WHERE username = $1 
-          AND seat_id NOT IN (16, 17) 
-          AND (
-            ($2::timestamp BETWEEN start_date AND end_date) OR 
-            ($3::timestamp BETWEEN start_date AND end_date) OR 
-            (start_date < $2::timestamp AND end_date > $3::timestamp)
-          )
-        `;
-        const overlapReservations = await conn.query(overlapReservationsQuery, [user, start, end]);
-        console.log('Actual Overlapping Reservations:', overlapReservations.rows);
-
         return res.status(200).json({
           successfull: false,
           rows: rows.map((item) => item.seat_id)
         });
       }
+      */
 
       const insertQuery = `
         INSERT INTO book_a_seat.reservation (seat_id, username, start_date, end_date)
