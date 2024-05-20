@@ -36,6 +36,19 @@ export default async function handler(req, res) {
           (start_date < $2::timestamp AND end_date > $3::timestamp)
         )
       `, [user, start, end]);
+
+          console.log('Query:', `
+      SELECT DISTINCT(seat_id) 
+      FROM book_a_seat.reservation 
+      WHERE username = $1 
+      AND seat_id NOT IN (16, 17) 
+      AND (
+        ($2::timestamp BETWEEN start_date AND end_date) OR 
+        ($3::timestamp BETWEEN start_date AND end_date) OR 
+        (start_date < $2::timestamp AND end_date > $3::timestamp)
+      )
+    `, [user, start, end]);
+
       
       const rows = rslt?.rows;
       if (rows.length > 0) {
