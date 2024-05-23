@@ -1,8 +1,9 @@
 import { conn, cors, runMiddleware } from '../../lib/db';
+import moment from 'moment';
 
 export default async function handler(req, res) {
   await runMiddleware(req, res, cors);
-  
+
   if (req.method === 'OPTIONS') {
     res.status(200).end();
   } else if (req.method === 'GET') {
@@ -25,45 +26,20 @@ export default async function handler(req, res) {
       const { interval, user, seatId } = req.body;
       const [start, end] = interval;
 
+      // Convert to UTC to ensure consistent timezone handling
+      const startUTC = moment.utc(start).format('YYYY-MM-DD HH:mm:ss');
+      const endUTC = moment.utc(end).format('YYYY-MM-DD HH:mm:ss');
+
       // Log the incoming data for debugging
       console.log('Received POST data:', { interval, user, seatId });
-
-      // Remove or comment out the overlap check logic
-      /*
-      const checkOverlapQuery = `
-        SELECT DISTINCT(seat_id) 
-        FROM book_a_seat.reservation 
-        WHERE username = $1 
-        AND seat_id NOT IN (16, 17) 
-        AND (
-          ($2::timestamp BETWEEN start_date AND end_date) OR 
-          ($3::timestamp BETWEEN start_date AND end_date) OR 
-          (start_date < $2::timestamp AND end_date > $3::timestamp)
-        )
-      `;
-
-      console.log('Check Overlap Query:', checkOverlapQuery, [user, start, end]);
-
-      const rslt = await conn.query(checkOverlapQuery, [user, start, end]);
-      const rows = rslt?.rows;
-
-      console.log('Overlap Check Result:', rows);
-
-      if (rows.length > 0) {
-        return res.status(200).json({
-          successfull: false,
-          rows: rows.map((item) => item.seat_id)
-        });
-      }
-      */
 
       const insertQuery = `
         INSERT INTO book_a_seat.reservation (seat_id, username, start_date, end_date)
         VALUES ($1, $2, $3, $4)
       `;
-      console.log('Insert Query:', insertQuery, [seatId, user, start, end]);
+      console.log('Insert Query:', insertQuery, [seatId, user, startUTC, endUTC]);
 
-      await conn.query(insertQuery, [seatId, user, start, end]);
+      await conn.query(insertQuery, [seatId, user, startUTC, endUTC]);
       successfull = true;
 
     } catch (error) {
@@ -76,15 +52,19 @@ export default async function handler(req, res) {
       const { interval, id } = req.body;
       const [start, end] = interval;
 
+      // Convert to UTC to ensure consistent timezone handling
+      const startUTC = moment.utc(start).format('YYYY-MM-DD HH:mm:ss');
+      const endUTC = moment.utc(end).format('YYYY-MM-DD HH:mm:ss');
+
       const updateQuery = `
         UPDATE book_a_seat.reservation 
         SET start_date = $1, end_date = $2 
         WHERE id = $3
       `;
 
-      console.log('Update Query:', updateQuery, [start, end, id]);
+      console.log('Update Query:', updateQuery, [startUTC, endUTC, id]);
 
-      await conn.query(updateQuery, [start, end, id]);
+      await conn.query(updateQuery, [startUTC, endUTC, id]);
       successfull = true;
     } catch (error) {
       console.error('Error during reservation update:', error);
@@ -107,4 +87,3 @@ export default async function handler(req, res) {
     res.status(200).json({ successfull });
   }
 }
-
